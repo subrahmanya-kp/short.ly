@@ -6,6 +6,7 @@ services:
     environment:
       WORKER_ID: ${WORKER_ID:-0}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      DATABASE_URL: ${DATABASE_URL:-sqlite:////app/db.sqlite3}
     volumes:
       - sqlite_data:/app/db.sqlite3
     depends_on:
