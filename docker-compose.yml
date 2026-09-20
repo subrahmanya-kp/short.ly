@@ -1,0 +1,29 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      WORKER_ID: ${WORKER_ID:-0}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+    volumes:
+      - sqlite_data:/app/db.sqlite3
+    depends_on:
+      redis:
+        condition: service_healthy
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  sqlite_data:
+  redis_data:

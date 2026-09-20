@@ -2,3 +2,5 @@ Django>=6.1,<7
 djangorestframework
 pydantic
 python-dotenv
+django-redis
+gunicorn

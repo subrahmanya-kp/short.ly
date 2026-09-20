@@ -134,5 +134,26 @@ MAILERS = {
 
 
 # Snowflake ID generation (see shortner/snowflake.py)
-# Unique per running instance when deployed as multiple processes/hosts (0-31).
+# Unique per machine/instance (0-3) when deployed across multiple hosts.
+# Each gunicorn worker process on a host gets its own sub-id automatically
+# (see gunicorn.conf.py's post_fork hook), so this only needs to change
+# when running more than one host/container.
 WORKER_ID = int(os.environ.get('WORKER_ID', 0))
+
+
+# Cache
+# https://docs.djangoproject.com/en/6.1/topics/cache/
+
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379/0')
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': REDIS_URL,
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+        },
+    }
+}
+
+URL_CACHE_TTL_SECONDS = int(os.environ.get('URL_CACHE_TTL_SECONDS', str(60 * 60 * 24)))
