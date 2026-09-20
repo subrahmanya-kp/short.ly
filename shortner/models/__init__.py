@@ -1,1 +1,1 @@
-from .url import URL
+from .url import URL, url_cache_key
